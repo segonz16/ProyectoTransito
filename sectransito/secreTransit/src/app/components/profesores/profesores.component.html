@@ -1,0 +1,108 @@
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Registro De Profesores</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="profesorForm" (ngSubmit)="guardar()">
+        <div class="form-group">
+          <label for="documento">Documento</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="documento"
+            id="documento"
+            placeholder="Ingresa tu documento"
+          />
+        </div>
+        <div class="form-group">
+          <label for="tipoDocumento">Tipo de Documento</label>
+          <select
+            class="form-control"
+            formControlName="tipoDocumento"
+            id="tipoDocumento"
+          >
+            <option value="">Selecciona una opción</option>
+            <option value="CC">Cédula de Ciudadanía</option>
+            <option value="CE">Cédula de Extranjería</option>
+            <option value="TI">Tarjeta de Identidad</option>
+            <option value="PP">Pasaporte</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="nombreCompleto">Nombre Completo</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="nombre"
+            id="nombreCompleto"
+            placeholder="Ingresa tu nombre completo"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            formControlName="email"
+            id="email"
+            placeholder="Ingresa tu email"
+          />
+        </div>
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <input
+            type="tel"
+            class="form-control"
+            id="telefono"
+            formControlName="telefono"
+            placeholder="Ingresa tu número de teléfono"
+          />
+        </div>
+        <p></p>
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          [disabled]="profesorForm.invalid"
+        >
+          Guardar
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <h2>Profesores registrados</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Documento</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Telefono</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of profesores">
+        <td>{{ item.documento }}</td>
+        <td>{{ item.nombre }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.telefono }}</td>
+        <td>
+          <button type="button" class="btn btn-success" (click)="editar(item)">
+            Editar
+          </button>
+          <button
+            type=" button"
+            class="btn btn-danger"
+            (click)="eliminar(item)"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

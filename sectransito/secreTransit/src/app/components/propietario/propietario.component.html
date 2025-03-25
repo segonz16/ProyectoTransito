@@ -1,0 +1,163 @@
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Registro De propietario</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="propietarioForm" (ngSubmit)="guardar()">
+        <div class="form-group">
+          <label for="identificacion">Identificación</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="identificacion"
+            id="identificacion"
+            placeholder="Ingresa tu identificación"
+            pattern="[0-9]*"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            maxlength="15"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              propietarioForm.get('identificacion')?.hasError('required') &&
+              propietarioForm.get('identificacion')?.touched
+            "
+          >
+            La identificación es obligatoria.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="tipoDocumento">Tipo de Identificación</label>
+          <select
+            class="form-control"
+            formControlName="tipoDocumento"
+            id="tipoDocumento"
+          >
+            <option value="">Selecciona una opción</option>
+            <option value="CC">Cédula de Ciudadanía</option>
+            <option value="CC">NIT</option>
+            <option value="CE">Cédula de Extranjería</option>
+          </select>
+          <small
+            class="text-danger"
+            *ngIf="
+              propietarioForm.get('identificacion')?.hasError('required') &&
+              propietarioForm.get('identificacion')?.touched
+            "
+          >
+            El tipo de identificación es obligatorio.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="tipoPropietario">Tipo de propietario</label>
+          <select
+            class="form-control"
+            formControlName="tipoPropietario"
+            id="tipoPropietario"
+          >
+            <option value="">Selecciona una opción</option>
+            <option value="Persona">Persona</option>
+            <option value="Empresa">Empresa</option>
+          </select>
+
+          <small
+            class="text-danger"
+            *ngIf="
+              propietarioForm.get('tipoPropietario')?.hasError('required') &&
+              propietarioForm.get('tipoPropietario')?.touched
+            "
+          >
+            El tipo de propietario es obligatorio.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="nombreCompleto">Nombre Completo</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="nombre"
+            id="nombreCompleto"
+            placeholder="Ingresa tu nombre completo"
+            maxlength="100"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              propietarioForm.get('nombre')?.hasError('required') &&
+              propietarioForm.get('nombre')?.touched
+            "
+          >
+            El nombre completo es obligatorio.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="direccion">Dirección</label>
+          <input
+            type="direccion"
+            class="form-control"
+            formControlName="direccion"
+            id="direccion"
+            placeholder="Ingresa tu dirección"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              propietarioForm.get('direccion')?.hasError('required') &&
+              propietarioForm.get('direccion')?.touched
+            "
+          >
+            La dirección es obligatoria.
+          </small>
+        </div>
+        <p></p>
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          [disabled]="propietarioForm.invalid"
+        >
+          Guardar
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <h2>Propietario registrados</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Identificación</th>
+        <th>Nombre</th>
+        <th>Tipo Documento</th>
+        <th>Tipo De Propietario</th>
+        <th>Dirección</th>
+        <!-- <th>Opciones</th>-->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of propietarios">
+        <td>{{ item.identificacion }}</td>
+        <td>{{ item.nombre }}</td>
+        <td>{{ item.tipoDocumento }}</td>
+        <td>{{ item.tipoPropietario }}</td>
+        <td>{{ item.direccion }}</td>
+        <!---
+        <td>
+          <button type="button" class="btn btn-success" (click)="editar(item)">
+            Editar
+          </button>
+          <button
+            type=" button"
+            class="btn btn-danger"
+            (click)="eliminar(item)"
+          >
+            Eliminar
+          </button>
+        </td>
+    -->
+      </tr>
+    </tbody>
+  </table>
+</div>

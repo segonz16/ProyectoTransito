@@ -1,0 +1,10 @@
+
+ /* Estilo adicional opcional */
+ .navbar-brand {
+     font-weight: bold;
+     font-size: 1.5rem;
+ }
+
+ .nav-link:hover {
+     color: #00bcd4 !important;
+ }

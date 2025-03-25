@@ -1,0 +1,64 @@
+CREATE DATABASE transit;
+
+CREATE TABLE propietario (
+    identificacion VARCHAR(50) PRIMARY KEY,
+    tipo_propietario VARCHAR(20) CHECK (tipo_propietario IN ('Persona', 'Empresa')),
+    tipo_documento VARCHAR(20),
+    nombre VARCHAR(100) NOT NULL,
+    direccion TEXT
+);
+
+CREATE TABLE vehiculo (
+    id SERIAL PRIMARY KEY,
+    tipo VARCHAR(20) CHECK (tipo IN ('Moto', 'Automovil', 'Carro Pesado'))
+);
+
+-- Crear tabla matricula con propietario referenciado por identificacion
+CREATE TABLE matricula (
+    placa VARCHAR(20) PRIMARY KEY,
+    marca VARCHAR(50) NOT NULL,
+    fecha_matricula DATE NOT NULL,
+    propietario_id VARCHAR(50),  -- Ahora hace referencia a la identificación del propietario
+    vehiculo_id INT,
+    CONSTRAINT fk_matricula_propietario FOREIGN KEY (propietario_id) REFERENCES propietario(identificacion) ON DELETE SET NULL,
+    CONSTRAINT fk_matricula_vehiculo FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id) ON DELETE CASCADE
+);
+
+-- Crear tabla infraccion referenciada con la matrícula
+CREATE TABLE infraccion (
+    id SERIAL PRIMARY KEY,
+    fecha DATE NOT NULL,
+    accionada_por VARCHAR(20) CHECK (accionada_por IN ('Agente', 'Camara')),
+    placa VARCHAR(20),
+    CONSTRAINT fk_infraccion_matricula FOREIGN KEY (placa) REFERENCES matricula(placa) ON DELETE CASCADE
+);
+
+
+
+INSERT INTO propietario (identificacion, tipo_propietario, tipo_documento, nombre, direccion)
+VALUES 
+    ('123456789', 'Persona', 'CC', 'Juan Pérez', 'Calle 123, Bogotá'),
+    ('987654321', 'Persona', 'CC', 'María Gómez', 'Carrera 45, Medellín'),
+    ('900123456-7', 'Empresa', 'NIT', 'Transporte S.A.', 'Avenida 10, Cali');
+
+-- Insertar vehículos
+INSERT INTO vehiculo (tipo)
+VALUES 
+    ('Automovil'),
+    ('Moto'),
+    ('Carro Pesado');
+
+-- Insertar matrículas con propietario_id referenciando a identificacion
+INSERT INTO matricula (placa, marca, fecha_matricula, propietario_id, vehiculo_id)
+VALUES 
+    ('ABC123', 'Toyota', '2023-05-10', '123456789', 1),  -- Juan Pérez con un Automóvil
+    ('XYZ789', 'Honda', '2022-08-15', '987654321', 2),  -- María Gómez con una Moto
+    ('LMN456', 'Volvo', '2021-11-20', '900123456-7', 3);  -- Transporte S.A. con un Carro Pesado
+
+-- Insertar infracciones asociadas a la placa
+INSERT INTO infraccion (fecha, accionada_por, placa)
+VALUES 
+    ('2024-03-10', 'Agente', 'ABC123'),
+    ('2024-03-11', 'Camara', 'ABC123'),
+    ('2024-02-20', 'Camara', 'XYZ789'),
+    ('2024-01-05', 'Agente', 'LMN456');

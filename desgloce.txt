@@ -1,0 +1,27 @@
+Vehiculo:
+ tipo (Moto, automovil, carro pesado)
+ matricula:
+  placa
+  marca
+  fecha de matricula
+  propietario
+
+
+
+propietario:
+ tipoPropietario(persona, Empresa)
+ tipo documento
+ identificación
+ nombre
+ direccion
+
+infracción
+ fecha
+ accionadaPor(agente, camara)
+ 
+ Reporte historico de infracciones por propietario
+
+
+
+
+ 

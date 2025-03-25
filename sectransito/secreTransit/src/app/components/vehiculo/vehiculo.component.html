@@ -1,0 +1,165 @@
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Registro De Vehiculo</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="vehiculoForm" (ngSubmit)="guardar()">
+        <div class="form-group">
+          <label for="propietarioId">Identificación De Propietario</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="propietarioId"
+            id="propietarioId"
+            placeholder="Ingresa identificación"
+            pattern="[0-9]*"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            maxlength="15"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              vehiculoForm.get('propietarioId')?.hasError('required') &&
+              vehiculoForm.get('propietarioId')?.touched
+            "
+          >
+            La identificación es obligatoria.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="vehiculoId">Tipo De Vehiculo</label>
+          <select
+            class="form-control"
+            formControlName="vehiculoId"
+            id="vehiculoId"
+          >
+            <option value="" disabled>Selecciona una opción</option>
+            <option [value]="item.id" *ngFor="let item of tipoVehiculos">
+              {{ item.tipoVehiculo }}
+            </option>
+          </select>
+          <small
+            class="text-danger"
+            *ngIf="
+              vehiculoForm.get('vehiculoId')?.hasError('required') &&
+              vehiculoForm.get('vehiculoId')?.touched
+            "
+          >
+            El tipo de vehiculo es obligatoria.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="placa">Placa Del Vehiculo</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="placa"
+            id="placa"
+            placeholder="Ingresa placa del vehiculo"
+            maxlength="6"
+            pattern="^[A-Za-z0-9]+$"
+            oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              vehiculoForm.get('placa')?.hasError('required') &&
+              vehiculoForm.get('placa')?.touched
+            "
+          >
+            La placa es obligatoria.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="marca">Marca Del Vehiculo</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="marca"
+            id="marca"
+            placeholder="Ingresa marca del vehiculo"
+            maxlength="20"
+            pattern="^[A-Za-z0-9]+$"
+            oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              vehiculoForm.get('marca')?.hasError('required') &&
+              vehiculoForm.get('marca')?.touched
+            "
+          >
+            La marca del vehiculo es obligatoria.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="fechaMatricula">Fecha De Matricula</label>
+          <input
+            type="date"
+            class="form-control"
+            id="fechaMatricula"
+            formControlName="fechaMatricula"
+            min="1890-01-01"
+            [max]="maxFecha"
+          />
+          <small
+            class="text-danger"
+            *ngIf="
+              vehiculoForm.get('fechaMatricula')?.hasError('required') &&
+              vehiculoForm.get('fechaMatricula')?.touched
+            "
+          >
+            La fecha de matricula del vehiculo es obligatoria.
+          </small>
+        </div>
+        <p></p>
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          [disabled]="vehiculoForm.invalid"
+        >
+          Guardar
+        </button>
+      </form>
+      <div *ngIf="mensaje" class="alert alert-warning mt-3">{{ mensaje }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <h2>Vehiculos Registrados</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Identificación</th>
+        <th>Placa</th>
+        <th>Marca</th>
+        <th>Fecha Matricula</th>
+        <!-- <th>Opciones</th>-->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of vehiculos">
+        <td>{{ item.propietarioId }}</td>
+        <td>{{ item.placa }}</td>
+        <td>{{ item.marca }}</td>
+        <td>{{ item.fechaMatricula }}</td>
+        <!---
+        <td>
+          <button type="button" class="btn btn-success" (click)="editar(item)">
+            Editar
+          </button>
+          <button
+            type=" button"
+            class="btn btn-danger"
+            (click)="eliminar(item)"
+          >
+            Eliminar
+          </button>
+        </td>
+    -->
+      </tr>
+    </tbody>
+  </table>
+</div>
