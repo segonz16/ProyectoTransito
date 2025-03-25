@@ -8,10 +8,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
-
-import { ProfesoresComponent } from './components/profesores/profesores.component';
-import { ReservasComponent } from './components/reservas/reservas.component';
-import { SalonesComponent } from './components/salones/salones.component';
 import { HomeComponent } from './components/home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -34,12 +30,9 @@ import { VehiculoComponent } from './components/vehiculo/vehiculo.component';
 import { InfraccionComponent } from './components/infraccion/infraccion.component';
 
 const routes: Routes = [
-  { path: 'profesores', component: ProfesoresComponent },
   { path: 'propietario', component: PropietarioComponent },
   { path: 'vehiculo', component: VehiculoComponent },
   { path: 'infraccion', component: InfraccionComponent },
-  { path: 'salones', component: SalonesComponent },
-  { path: 'reservas', component: ReservasComponent },
   { path: 'home', component: HomeComponent },
 
 ];
@@ -49,9 +42,6 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     NavbarComponent,
-    ProfesoresComponent,
-    ReservasComponent,
-    SalonesComponent,
     HomeComponent,
     PropietarioComponent,
     VehiculoComponent,

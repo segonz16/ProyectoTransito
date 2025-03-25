@@ -67,4 +67,30 @@ public class InfraccionRest {
 
         return ResponseEntity.ok(infracciones);
     }
+
+//    @PostMapping(value = "/profesor/actualizar")
+//    private ResponseEntity<Profesor> actualizarProfesor(@RequestBody Profesor profesor) {
+//        try {
+//            if (profesorService.existsById(profesor.getDocumento())) {
+//                Profesor temp = profesorService.create(profesor);
+//
+//                return new ResponseEntity<>(profesor,HttpStatus.OK);
+//            } else {
+//                return ResponseEntity.notFound().build();
+//            }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//
+//    }
+
+//    @DeleteMapping("/eliminarprofesor/{id}")
+//    public ResponseEntity<Boolean> eliminarProfesorById(@PathVariable String id) {
+//        if (profesorService.existsById(id)) {
+//            profesorService.deleteById(id);
+//            return ResponseEntity.ok(profesorService.findById(id)!=null);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 }
