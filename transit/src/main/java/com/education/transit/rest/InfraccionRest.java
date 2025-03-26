@@ -77,29 +77,38 @@ public class InfraccionRest {
         this.webSocketService = webSocketService;
     }
 
-//    @PostMapping(value = "/profesor/actualizar")
-//    private ResponseEntity<Profesor> actualizarProfesor(@RequestBody Profesor profesor) {
-//        try {
-//            if (profesorService.existsById(profesor.getDocumento())) {
-//                Profesor temp = profesorService.create(profesor);
-//
-//                return new ResponseEntity<>(profesor,HttpStatus.OK);
-//            } else {
-//                return ResponseEntity.notFound().build();
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//
-//    }
+   @PostMapping(value = "/actualizar")
+    private ResponseEntity<?> actualizarInfraccion(@RequestBody Infraccion infraccion) {
+        try {
+            if (!matriculaService.existsByPlaca(infraccion.getPlaca())) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "El vehículo con placa " + infraccion.getPlaca() + " no está registrado.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
 
-//    @DeleteMapping("/eliminarprofesor/{id}")
-//    public ResponseEntity<Boolean> eliminarProfesorById(@PathVariable String id) {
-//        if (profesorService.existsById(id)) {
-//            profesorService.deleteById(id);
-//            return ResponseEntity.ok(profesorService.findById(id)!=null);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+            if (infraccionService.existsById(String.valueOf(infraccion.getId()))) {
+                Infraccion temp = infraccionService.update(infraccion);
+                webSocketService.sendInfraccionUpdate(temp);
+                return ResponseEntity.ok(temp);
+            } else {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "La infracción con id " + infraccion.getId() + " no está registrada.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Ocurrió un error al actualizazr la infracción.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+   @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Boolean> eliminarInfraccionById(@PathVariable String id) {
+        if (infraccionService.existsById(id)) {
+            infraccionService.deleteById(id);
+            return ResponseEntity.ok(infraccionService.finById(id)!=null);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

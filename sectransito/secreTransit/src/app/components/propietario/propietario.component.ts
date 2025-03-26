@@ -14,6 +14,7 @@ export class PropietarioComponent implements OnInit {
 
   propietarioForm: any;
   propietarios: any;
+  mensaje: string = '';
 
 
   constructor(
@@ -40,7 +41,13 @@ export class PropietarioComponent implements OnInit {
     );
 
     this.webSocketService.getPropietarioObservable().subscribe(propietario => {
-      if (!this.propietarios.some((p: any) => p.identificacion === propietario.identificacion)) {
+      const index = this.propietarios.findIndex((p: any) => p.identificacion === propietario.identificacion);
+
+      if (index !== -1) {
+        if (JSON.stringify(this.propietarios[index]) !== JSON.stringify(propietario)) {
+          this.propietarios[index] = propietario;
+        }
+      } else {
         this.propietarios.push(propietario);
       }
     });
@@ -49,6 +56,22 @@ export class PropietarioComponent implements OnInit {
 
   guardar(): void {
     this.propietarioService.savePropietario(this.propietarioForm.value).subscribe(resp => {
+      this.mensaje = '¡Vehiculo registrado correctamente!';
+      this.propietarioForm.reset();
+      this.propietarios = this.propietarios.filter((propietario: { identificacion: any; }) => resp.identificacion !== propietario.identificacion)
+      this.propietarios.push(resp);
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 3000);
+    },
+      (error) => {
+        this.mensaje = error.message;
+      }
+    )
+  }
+
+  actualizar(): void {
+    this.propietarioService.updatePropietario(this.propietarioForm.value).subscribe(resp => {
       this.propietarioForm.reset();
       this.propietarios = this.propietarios.filter((propietario: { identificacion: any; }) => resp.identificacion !== propietario.identificacion)
       this.propietarios.push(resp);
@@ -56,34 +79,15 @@ export class PropietarioComponent implements OnInit {
       error => { console.error(error) }
     )
   }
-  /*
-    actualizar(): void {
-      this.propietarioService.updatePropietario(this.propietarioForm.value).subscribe(resp => {
-        this.propietarioForm.reset();
-        this.propietarios.push(resp);
-      },
-        error => { console.error(error) }
-      )
-    }
-  
-    eliminar(profesor: any) {
-      this.propietarioService.deletePropietario(profesor.documento).subscribe(resp => {
-        console.log(resp)
-        if (resp === true) {
-          this.propietarios.pop(profesor)
-        }
-      })
-    }
-  
-    editar(profesor: any) {
-      this.propietarioForm.setValue({
-        documento: profesor.documento,
-        tipoDocumento: profesor.tipoDocumento,
-        nombre: profesor.nombre,
-        email: profesor.email,
-        telefono: profesor.telefono
-      })
-    }
-    
-    */
+
+  editar(propietario: any) {
+    this.propietarioForm.setValue({
+      identificacion: propietario.identificacion,
+      tipoPropietario: propietario.tipoPropietario,
+      tipoDocumento: propietario.tipoDocumento,
+      nombre: propietario.nombre,
+      direccion: propietario.direccion
+    })
+  }
+
 }

@@ -15,11 +15,15 @@ export class PropietarioService {
   }
 
   public getAllPropietario(): Observable<any> {
-    return this.httpClient.get(this.API_SERVER + "");
+    return this.httpClient.get(this.API_SERVER + "").pipe(catchError(this.manejarError));
   }
 
   public savePropietario(propietario: any): Observable<any> {
     return this.httpClient.post(this.API_SERVER + "/save", propietario).pipe(catchError(this.manejarError));
+  }
+
+  public updatePropietario(propietario: any): Observable<any> {
+    return this.httpClient.post(this.API_SERVER + "/actualizar", propietario).pipe(catchError(this.manejarError));
   }
 
 
@@ -35,13 +39,4 @@ export class PropietarioService {
     return throwError(() => new Error(mensajeError));
   }
 
-  /*
-    public deleteProfesor(id: any): Observable<any> {
-      return this.httpClient.delete(this.API_SERVER + "eliminarprofesor/" + id);
-    }
-  
-    public updateProfesor(profesor: any): Observable<any> {
-      return this.httpClient.post(this.API_SERVER + "profesor/actualizar", profesor);
-    }
-    */
 }

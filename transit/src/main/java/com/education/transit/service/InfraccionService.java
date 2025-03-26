@@ -2,13 +2,13 @@ package com.education.transit.service;
 
 import com.education.transit.models.Infraccion;
 import com.education.transit.models.InfraccionDTO;
-import com.education.transit.models.Vehiculo;
 import com.education.transit.repository.InfraccionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +18,10 @@ public class InfraccionService {
     private InfraccionRepository infraccionRepository;
 
     public Infraccion create(Infraccion infraccion) {
+        return infraccionRepository.save(infraccion);
+    }
+
+    public Infraccion update(Infraccion infraccion) {
         return infraccionRepository.save(infraccion);
     }
 
@@ -44,6 +48,14 @@ public class InfraccionService {
 
     public List<Infraccion> getAllInfracciones() {
         return infraccionRepository.findAll();
+    }
+
+    public void deleteById(String id) {
+        infraccionRepository.deleteById(id);
+    }
+
+    public Optional finById(String id){
+        return infraccionRepository.findById(id);
     }
 
 

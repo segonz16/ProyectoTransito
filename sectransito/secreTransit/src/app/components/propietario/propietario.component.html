@@ -119,6 +119,15 @@
           Guardar
         </button>
       </form>
+      <p></p>
+      <button
+        (click)="actualizar()"
+        class="btn btn-primary btn-block"
+        [disabled]="propietarioForm.invalid"
+      >
+        Actualizar
+      </button>
+      <div *ngIf="mensaje" class="alert alert-warning mt-3">{{ mensaje }}</div>
     </div>
   </div>
 </div>
@@ -133,7 +142,7 @@
         <th>Tipo Documento</th>
         <th>Tipo De Propietario</th>
         <th>Dirección</th>
-        <!-- <th>Opciones</th>-->
+        <th>Opciones</th>
       </tr>
     </thead>
     <tbody>
@@ -143,20 +152,19 @@
         <td>{{ item.tipoDocumento }}</td>
         <td>{{ item.tipoPropietario }}</td>
         <td>{{ item.direccion }}</td>
-        <!---
+
         <td>
           <button type="button" class="btn btn-success" (click)="editar(item)">
             Editar
           </button>
-          <button
+          <!--<button
             type=" button"
             class="btn btn-danger"
             (click)="eliminar(item)"
           >
             Eliminar
-          </button>
+          </button>-->
         </td>
-    -->
       </tr>
     </tbody>
   </table>

@@ -67,7 +67,12 @@ export class VehiculoComponent implements OnInit {
     });
 
     this.webSocketService.getVehiculoObservable().subscribe(vehiculo => {
-      if (!this.vehiculos.some((v: any) => v.placa === vehiculo.placa)) {
+      const index = this.vehiculos.findIndex((v: any) => v.placa === vehiculo.placa);
+      if (index !== -1) {
+        if (JSON.stringify(this.vehiculos[index]) !== JSON.stringify(vehiculo)) {
+          this.vehiculos[index] = vehiculo;
+        }
+      } else {
         this.vehiculos.push(vehiculo);
       }
     });
@@ -119,34 +124,23 @@ export class VehiculoComponent implements OnInit {
     );
 
   }
-  /*
-    actualizar(): void {
-      this.propietarioService.updatePropietario(this.propietarioForm.value).subscribe(resp => {
-        this.propietarioForm.reset();
-        this.propietarios.push(resp);
-      },
-        error => { console.error(error) }
-      )
-    }
-  
-    eliminar(profesor: any) {
-      this.propietarioService.deletePropietario(profesor.documento).subscribe(resp => {
-        console.log(resp)
-        if (resp === true) {
-          this.propietarios.pop(profesor)
-        }
-      })
-    }
-  
-    editar(profesor: any) {
-      this.propietarioForm.setValue({
-        documento: profesor.documento,
-        tipoDocumento: profesor.tipoDocumento,
-        nombre: profesor.nombre,
-        email: profesor.email,
-        telefono: profesor.telefono
-      })
-    }
-    
-    */
+  actualizar(): void {
+    this.vehiculoService.updateVehiculo(this.vehiculoForm.value).subscribe(resp => {
+      this.vehiculoForm.reset();
+      this.vehiculos = this.vehiculos.filter((vehiculo: { placa: any; }) => resp.placa !== vehiculo.placa)
+      this.vehiculos.push(resp);
+    },
+      error => { console.error(error) }
+    )
+  }
+
+  editar(vehiculo: any) {
+    this.vehiculoForm.setValue({
+      placa: vehiculo.placa,
+      marca: vehiculo.marca,
+      fechaMatricula: vehiculo.fechaMatricula,
+      propietarioId: vehiculo.propietarioId,
+      vehiculoId: vehiculo.vehiculoId
+    })
+  }
 }

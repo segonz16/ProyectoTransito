@@ -32,4 +32,8 @@ public class MatriculaService {
         return matriculaRepository.findByPlaca(placa);
     }
 
+    public void deleteById(String id) {
+        matriculaRepository.deleteById(id);
+    }
+
 }

@@ -122,7 +122,15 @@
         >
           Guardar
         </button>
+        <p></p>
       </form>
+      <button
+        (click)="actualizar()"
+        class="btn btn-primary btn-block"
+        [disabled]="vehiculoForm.invalid"
+      >
+        Actualizar
+      </button>
       <div *ngIf="mensaje" class="alert alert-warning mt-3">{{ mensaje }}</div>
     </div>
   </div>
@@ -137,7 +145,7 @@
         <th>Placa</th>
         <th>Marca</th>
         <th>Fecha Matricula</th>
-        <!-- <th>Opciones</th>-->
+        <th>Opciones</th>
       </tr>
     </thead>
     <tbody>
@@ -146,20 +154,20 @@
         <td>{{ item.placa }}</td>
         <td>{{ item.marca }}</td>
         <td>{{ item.fechaMatricula }}</td>
-        <!---
+
         <td>
           <button type="button" class="btn btn-success" (click)="editar(item)">
             Editar
           </button>
+          <!-- 
           <button
             type=" button"
             class="btn btn-danger"
             (click)="eliminar(item)"
           >
             Eliminar
-          </button>
+          </button>-->
         </td>
-    -->
       </tr>
     </tbody>
   </table>

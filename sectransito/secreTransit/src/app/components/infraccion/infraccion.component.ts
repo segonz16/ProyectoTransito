@@ -68,7 +68,12 @@ export class InfraccionComponent implements OnInit {
       });
 
     this.webSocketService.getInfraccionObservable().subscribe(infraccion => {
-      if (!this.infracciones.some((f: any) => f.id === infraccion.id)) {
+      const index = this.infracciones.findIndex((f: any) => f.id === infraccion.id);
+      if (index !== -1) {
+        if (JSON.stringify(this.infracciones[index]) !== JSON.stringify(infraccion)) {
+          this.infracciones[index] = infraccion;
+        }
+      } else {
         this.infracciones.push(infraccion);
       }
     });
@@ -122,4 +127,5 @@ export class InfraccionComponent implements OnInit {
       }
     );
   }
+
 }

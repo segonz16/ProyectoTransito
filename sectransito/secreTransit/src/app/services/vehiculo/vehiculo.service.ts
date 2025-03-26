@@ -24,8 +24,12 @@ export class VehiculoService {
     return this.httpClient.get(this.API_SERVER + "matricula").pipe(catchError(this.manejarError));
   }
 
-  public saveVehiculo(reserva: any): Observable<any> {
-    return this.httpClient.post(this.API_SERVER + "matricula/save", reserva).pipe(catchError(this.manejarError));
+  public saveVehiculo(vehiculo: any): Observable<any> {
+    return this.httpClient.post(this.API_SERVER + "matricula/save", vehiculo).pipe(catchError(this.manejarError));
+  }
+
+  public updateVehiculo(vehiculo: any): Observable<any> {
+    return this.httpClient.post(this.API_SERVER + "matricula/actualizar", vehiculo).pipe(catchError(this.manejarError));
   }
 
   private manejarError(error: HttpErrorResponse) {

@@ -61,6 +61,34 @@ public class PropietarioRest {
         }
     }
 
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Boolean> eliminarPropietarioById(@PathVariable String id) {
+        if (propietarioService.existsById(id)) {
+            propietarioService.deleteById(id);
+            return ResponseEntity.ok(propietarioService.findByIdentificacion(id)!=null);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping(value = "/actualizar")
+    private ResponseEntity<?> actualizarPropietarior(@RequestBody Propietario propietario) {
+        try {
+            if (propietarioService.existsById(propietario.getIdentificacion())) {
+                Propietario temp = propietarioService.update(propietario);
+                webSocketService.sendPropietarioUpdate(temp);
+                return ResponseEntity.ok(temp);
+            } else {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "El propietario con identificación " + propietario.getIdentificacion() + " no está registrado.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Ocurrió un error al actualizar el propietario.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
 
 
     public PropietarioRest(PropietarioService propietarioService, WebSocketService webSocketService) {

@@ -23,8 +23,12 @@ export class InfraccionService {
     return this.httpClient.get(this.API_SERVER + "");
   }
 
-  public saveInfraccion(propietario: any): Observable<any> {
-    return this.httpClient.post(this.API_SERVER + "/save", propietario).pipe(catchError(this.manejarError));
+  public saveInfraccion(infraccion: any): Observable<any> {
+    return this.httpClient.post(this.API_SERVER + "/save", infraccion).pipe(catchError(this.manejarError));
+  }
+
+  public updateInfraccion(infraccion: any): Observable<any> {
+    return this.httpClient.post(this.API_SERVER + "/actualizar", infraccion).pipe(catchError(this.manejarError));
   }
 
   private manejarError(error: HttpErrorResponse) {

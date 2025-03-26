@@ -70,6 +70,43 @@ public class MatriculaRest {
         }
     }
 
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Boolean> eliminarMatriculaById(@PathVariable String id) {
+        if (matriculaService.existsByPlaca(id)) {
+            matriculaService.deleteById(id);
+            return ResponseEntity.ok(matriculaService.findByPlaca(id)!=null);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping(value = "/actualizar")
+    private ResponseEntity<?> actualizarMatricula(@RequestBody Matricula matricula) {
+        try {
+            if (!propietarioService.existsById(matricula.getPropietarioId())) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "El propietario con identificación " + matricula.getPropietarioId() + " no está registrado.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+
+            if (matriculaService.existsByPlaca(matricula.getPlaca())) {
+                Matricula temp = matriculaService.create(matricula);
+                webSocketService.sendVehiculoUpdate(temp);
+                return ResponseEntity.ok(temp);
+            }else{
+
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "El vehículo con placa " + matricula.getPlaca() + " no está registrado.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Ocurrió un error al guardar la matrícula.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
     public MatriculaRest(MatriculaService matriculaService, WebSocketService webSocketService) {
         this.matriculaService = matriculaService;
         this.webSocketService = webSocketService;

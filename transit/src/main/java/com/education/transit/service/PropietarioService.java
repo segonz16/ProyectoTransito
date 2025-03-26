@@ -18,12 +18,20 @@ public class PropietarioService {
         return propietarioRepository.save(propietario);
     }
 
+    public Propietario update(Propietario propietario) {
+        return propietarioRepository.save(propietario);
+    }
+
     public List<Propietario> getAllPropietarios() {
         return propietarioRepository.findAll();
     }
 
     public boolean existsById(String id) {
         return propietarioRepository.existsById(id);
+    }
+
+    public void deleteById(String id) {
+        propietarioRepository.deleteById(id);
     }
 
     public List<Propietario> findByIdentificacion(String identificacion) {
