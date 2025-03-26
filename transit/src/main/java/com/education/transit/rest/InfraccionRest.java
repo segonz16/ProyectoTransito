@@ -6,6 +6,7 @@ import com.education.transit.models.Matricula;
 import com.education.transit.models.Propietario;
 import com.education.transit.service.InfraccionService;
 import com.education.transit.service.MatriculaService;
+import com.education.transit.service.WebSocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,8 @@ public class InfraccionRest {
     @Autowired
     MatriculaService matriculaService;
 
+    private final WebSocketService webSocketService;
+
     @GetMapping("/{placa}")
     private ResponseEntity<List<Infraccion>> ListarInfraccionporPlaca(@PathVariable String placa) {
         return ResponseEntity.ok(infraccionService.findByPlaca(placa));
@@ -45,6 +48,7 @@ public class InfraccionRest {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }
             Infraccion temporal = infraccionService.create(infraccion);
+            webSocketService.sendVehiculoUpdate(temporal);
             return ResponseEntity.created(new URI("/api/infraccion/save" + temporal.getId())).body(temporal);
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -66,6 +70,11 @@ public class InfraccionRest {
         }
 
         return ResponseEntity.ok(infracciones);
+    }
+
+    public InfraccionRest(InfraccionService infraccionService, WebSocketService webSocketService) {
+        this.infraccionService = infraccionService;
+        this.webSocketService = webSocketService;
     }
 
 //    @PostMapping(value = "/profesor/actualizar")

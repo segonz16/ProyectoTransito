@@ -5,6 +5,7 @@ import { debounceTime } from 'rxjs/operators';
 import { VehiculoService } from '../../services/vehiculo/vehiculo.service'
 import { PropietarioService } from '../../services/propietario/propietario.service'
 import { error } from 'console';
+import { WebSocketService } from '../../services/websocket/websocket.service';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class VehiculoComponent implements OnInit {
   constructor(
     public fb: FormBuilder,
     public vehiculoService: VehiculoService,
-    public propietarioService: PropietarioService
+    public propietarioService: PropietarioService,
+    public webSocketService: WebSocketService
   ) {
 
   }
@@ -62,6 +64,12 @@ export class VehiculoComponent implements OnInit {
           this.vehiculoForm.patchValue(update, { emitEvent: false });
         }
       });
+    });
+
+    this.webSocketService.getVehiculoObservable().subscribe(vehiculo => {
+      if (!this.vehiculos.some((v: any) => v.placa === vehiculo.placa)) {
+        this.vehiculos.push(vehiculo);
+      }
     });
 
 

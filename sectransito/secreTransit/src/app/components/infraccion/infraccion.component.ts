@@ -5,6 +5,7 @@ import { debounceTime } from 'rxjs/operators';
 import { InfraccionService } from '../../services/infraccion/infraccion.service'
 import { VehiculoService } from '../../services/vehiculo/vehiculo.service'
 import { error } from 'console';
+import { WebSocketService } from '../../services/websocket/websocket.service';
 
 @Component({
   selector: 'app-infraccion',
@@ -25,7 +26,8 @@ export class InfraccionComponent implements OnInit {
   constructor(
     public fb: FormBuilder,
     public infraccionService: InfraccionService,
-    public vehiculoService: VehiculoService
+    public vehiculoService: VehiculoService,
+    public webSocketService: WebSocketService
   ) {
 
   }
@@ -64,6 +66,12 @@ export class InfraccionComponent implements OnInit {
           this.mensajeI = '';
         }
       });
+
+    this.webSocketService.getInfraccionObservable().subscribe(infraccion => {
+      if (!this.infracciones.some((f: any) => f.id === infraccion.id)) {
+        this.infracciones.push(infraccion);
+      }
+    });
 
   }
 

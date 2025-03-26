@@ -1,10 +1,9 @@
 package com.education.transit.rest;
 
 import com.education.transit.models.Matricula;
-import com.education.transit.models.Propietario;
-import com.education.transit.models.Vehiculo;
 import com.education.transit.service.MatriculaService;
 import com.education.transit.service.PropietarioService;
+import com.education.transit.service.WebSocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,9 @@ public class MatriculaRest {
     MatriculaService matriculaService;
     @Autowired
     PropietarioService propietarioService;
+
+    private final WebSocketService webSocketService;
+
 
     @GetMapping("/{placa}")
     public ResponseEntity<?> ListarMatriculaPorId(@PathVariable String placa) {
@@ -58,6 +60,7 @@ public class MatriculaRest {
             }
 
             Matricula temp = matriculaService.create(matricula);
+            webSocketService.sendVehiculoUpdate(temp);
             return ResponseEntity.ok(temp);
 
         } catch (Exception e) {
@@ -65,5 +68,10 @@ public class MatriculaRest {
             errorResponse.put("error", "Ocurrió un error al guardar la matrícula.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
+    }
+
+    public MatriculaRest(MatriculaService matriculaService, WebSocketService webSocketService) {
+        this.matriculaService = matriculaService;
+        this.webSocketService = webSocketService;
     }
 }

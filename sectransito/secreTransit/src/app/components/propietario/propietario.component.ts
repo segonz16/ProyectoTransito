@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PropietarioService } from '../../services/propietario/propietario.service'
 import { error } from 'console';
+import { WebSocketService } from '../../services/websocket/websocket.service';
 
 @Component({
   selector: 'app-propietario',
@@ -17,7 +18,8 @@ export class PropietarioComponent implements OnInit {
 
   constructor(
     public fb: FormBuilder,
-    public propietarioService: PropietarioService
+    public propietarioService: PropietarioService,
+    public webSocketService: WebSocketService
   ) {
 
   }
@@ -35,7 +37,13 @@ export class PropietarioComponent implements OnInit {
 
     },
       error => { console.error(error) }
-    )
+    );
+
+    this.webSocketService.getPropietarioObservable().subscribe(propietario => {
+      if (!this.propietarios.some((p: any) => p.identificacion === propietario.identificacion)) {
+        this.propietarios.push(propietario);
+      }
+    });
 
   }
 

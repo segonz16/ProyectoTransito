@@ -3,6 +3,7 @@ package com.education.transit.rest;
 import com.education.transit.models.Matricula;
 import com.education.transit.models.Propietario;
 import com.education.transit.service.PropietarioService;
+import com.education.transit.service.WebSocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ public class PropietarioRest {
 
     @Autowired
     PropietarioService propietarioService;
+
+    private final WebSocketService webSocketService;
 
     @GetMapping(value = "")
     private ResponseEntity<List<Propietario>> listAllPropietario() {
@@ -44,6 +47,7 @@ public class PropietarioRest {
         try {
             if (!propietarioService.existsById(propietario.getIdentificacion())) {
                 Propietario temp = propietarioService.create(propietario);
+                webSocketService.sendPropietarioUpdate(temp);
                 return ResponseEntity.ok(temp);
             } else {
                 Map<String, String> errorResponse = new HashMap<>();
@@ -55,5 +59,12 @@ public class PropietarioRest {
             errorResponse.put("error", "Ocurrió un error al guardar el propietario.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
+    }
+
+
+
+    public PropietarioRest(PropietarioService propietarioService, WebSocketService webSocketService) {
+        this.propietarioService = propietarioService;
+        this.webSocketService = webSocketService;
     }
 }
